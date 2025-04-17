@@ -1,0 +1,23 @@
+services:
+  # FastAPI Backend Service
+  - type: web
+    name: echo-backend
+    runtime: python
+    region: oregon
+    rootDir: backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.3
+
+  # React Frontend Service (Static Site)
+  - type: web
+    name: echo-frontend
+    env: static
+    rootDir: frontend
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_BACKEND_URL
+        value: https://echo-backend-REPLACEME.onrender.com
